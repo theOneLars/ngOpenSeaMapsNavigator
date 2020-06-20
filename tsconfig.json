@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ng-open-sea-maps-navigator": [
+        "dist/ng-open-sea-maps-navigator"
+      ],
+      "ng-open-sea-maps-navigator/*": [
+        "dist/ng-open-sea-maps-navigator/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
