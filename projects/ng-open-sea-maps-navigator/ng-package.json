@@ -3,5 +3,8 @@
   "dest": "../../dist/ng-open-sea-maps-navigator",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "leaflet"
+  ]
 }
