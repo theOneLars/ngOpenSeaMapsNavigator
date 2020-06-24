@@ -11,6 +11,7 @@ export class AppComponent {
 
   private map: MapView;
   private mapLayer: Map<string, MapLayer>;
+  private geoJsons: Map<string, any>;
 
   constructor() {
     this.map = new MapView(15, [53.9628, 10.8910]);
@@ -37,6 +38,38 @@ export class AppComponent {
     // this.mapLayer.set(openStreetMapsSateliteLayer.layerId, openStreetMapsSateliteLayer);
     this.mapLayer.set(openStreetMapsCardLayer.layerId, openStreetMapsCardLayer);
     this.mapLayer.set(openSeaMarksLayer.layerId, openSeaMarksLayer);
+
+    this.geoJsons = new Map<string, any>();
+
+    const sampleGeoJson = {
+      type: 'FeatureCollection',
+      features:
+        [
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: [
+                [10.881289, 53.957773],
+                [10.878766, 53.957319],
+                [10.878345, 53.958003],
+                [10.897765, 53.961912],
+                [11.108725, 54.048871],
+                [11.428183, 53.947263],
+                [11.438593, 53.960522],
+                [11.436651, 53.988079],
+                [11.445287, 53.996176]
+              ]
+            },
+            properties: {
+              Name: 'Track Points',
+              popupContent: 'This is the way to the east'
+            }
+          }
+        ]
+    };
+
+    this.geoJsons.set('firstDraft', sampleGeoJson.features);
   }
 
 

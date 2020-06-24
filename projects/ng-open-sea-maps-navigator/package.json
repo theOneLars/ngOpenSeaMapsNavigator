@@ -1,6 +1,10 @@
 {
   "name": "ng-open-sea-maps-navigator",
   "version": "0.0.1",
+  "scripts": {
+    "ng": "ng",
+    "buildAndWatch": "ng build --watch"
+  },
   "peerDependencies": {
     "@angular/common": "^8.1.3",
     "@angular/core": "^8.1.3",

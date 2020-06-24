@@ -16,8 +16,18 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
   @Input()
   mapLayer: Map<string, MapLayer>;
 
+  @Input()
+  geoJsons: Map<string, any>;
+
   private map;
   private layer: Map<string, any>;
+  private geoJsoLayer: Map<string, any>;
+
+  private geoJSonStyle = {
+    color: 'red',
+    weight: 2,
+    opacity: 1
+  };
 
   constructor() {
   }
@@ -49,6 +59,17 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
             this.layer.set(key, layerToAdd);
           }
         );
+      }
+
+      if (this.geoJsons) {
+        this.geoJsoLayer = new Map<string, any>();
+        this.geoJsons.forEach((value, key) => {
+
+          const geoJsonLayerToAdd = L.geoJSON(value, this.geoJSonStyle);
+          geoJsonLayerToAdd.addTo(this.map);
+
+          this.geoJsoLayer.set(key, geoJsonLayerToAdd);
+        });
       }
     }
   }
