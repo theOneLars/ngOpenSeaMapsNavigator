@@ -1,17 +1,4 @@
-.map-container {
-  position: absolute;
-  top: 50px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 10px;
-}
-
-.map-frame {
-  border: 1px solid black;
-  height: 100%;
-}
-
-#map {
-  height: 100%;
+div.map-element {
+  height: 80vh;
+  overflow: no-display;
 }

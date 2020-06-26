@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import * as L from 'leaflet';
 import {MapView} from '../../shared/dto/map-view';
 import {MapLayer} from '../../shared/dto/map-layer';
@@ -9,6 +9,9 @@ import {MapLayer} from '../../shared/dto/map-layer';
   styleUrls: ['./navigator-main.component.css']
 })
 export class NavigatorMainComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('map', {static: true})
+  mapElement: ElementRef;
 
   @Input()
   mapview: MapView;
@@ -42,8 +45,7 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
   private initMap(): void {
 
     if (this.mapview) {
-
-      this.map = L.map('map', {
+      this.map = L.map(this.mapElement.nativeElement, {
         center: this.mapview.center,
         zoom: this.mapview.zoom
       });
