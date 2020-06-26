@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
 import * as L from 'leaflet';
 import {MapView} from '../../shared/dto/map-view';
 import {MapLayer} from '../../shared/dto/map-layer';
+import {GeoJsonLayer} from '../../shared/dto/geo-json-layer';
 
 @Component({
   selector: 'lib-navigator-main',
@@ -17,13 +18,17 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
   mapview: MapView;
 
   @Input()
-  mapLayer: Map<string, MapLayer>;
+  baseLayer: Array<MapLayer>;
 
   @Input()
-  geoJsons: Map<string, any>;
+  overlayMaps: Array<MapLayer>;
+
+  @Input()
+  geoJsons: Array<GeoJsonLayer>;
 
   private map;
-  private layer: Map<string, any>;
+  private baseMaps: Map<string, any>;
+  private optionalMapLayer: Map<string, any>;
   private geoJsoLayer: Map<string, any>;
 
   private geoJSonStyle = {
@@ -50,29 +55,49 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
         zoom: this.mapview.zoom
       });
 
-      if (this.mapLayer) {
-        this.layer = new Map<string, any>();
-        this.mapLayer.forEach((value, key) => {
+      const layerControl = L.control.layers().addTo(this.map);
+
+      if (this.baseLayer) {
+        this.baseMaps = new Map<string, any>();
+
+        this.baseLayer.forEach((value) => {
             const layerToAdd = L.tileLayer(value.tilesServerUrl, {
               maxZoom: value.maxZoom,
               attribution: value.attribution
             });
             layerToAdd.addTo(this.map);
-            this.layer.set(key, layerToAdd);
+            console.log(L.control.layers);
+            layerControl.addBaseLayer(layerToAdd, value.displayName);
+            this.baseMaps.set(value.layerId, layerToAdd);
+          }
+        );
+      }
+
+      if (this.overlayMaps) {
+        this.optionalMapLayer = new Map<string, any>();
+        this.overlayMaps.forEach((value) => {
+            const layerToAdd = L.tileLayer(value.tilesServerUrl, {
+              maxZoom: value.maxZoom,
+              attribution: value.attribution
+            });
+            layerToAdd.addTo(this.map);
+            layerControl.addOverlay(layerToAdd, value.displayName);
+            this.optionalMapLayer.set(value.layerId, layerToAdd);
           }
         );
       }
 
       if (this.geoJsons) {
         this.geoJsoLayer = new Map<string, any>();
-        this.geoJsons.forEach((value, key) => {
+        this.geoJsons.forEach((value) => {
 
-          const geoJsonLayerToAdd = L.geoJSON(value, this.geoJSonStyle);
+          const geoJsonLayerToAdd = L.geoJSON(value.geoJson, this.geoJSonStyle);
           geoJsonLayerToAdd.addTo(this.map);
-
-          this.geoJsoLayer.set(key, geoJsonLayerToAdd);
+          layerControl.addOverlay(geoJsonLayerToAdd, value.displayName);
+          this.geoJsoLayer.set(value.layerId, geoJsonLayerToAdd);
         });
       }
     }
   }
+
 }

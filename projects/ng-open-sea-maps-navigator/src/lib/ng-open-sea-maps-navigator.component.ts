@@ -1,33 +1,35 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MapView} from './shared/dto/map-view';
 import {MapLayer} from './shared/dto/map-layer';
+import {GeoJsonLayer} from './shared/dto/geo-json-layer';
 
 @Component({
   selector: 'lib-ng-open-sea-maps-navigator',
   template: `
     <lib-navigator-main
       [mapview]="mapView"
-      [mapLayer]="mapLayer"
+      [baseLayer]="baseLayer"
+      [overlayMaps]="overlayMaps"
       [geoJsons]="geoJsons"
     ></lib-navigator-main>
   `,
   styles: []
 })
-export class NgOpenSeaMapsNavigatorComponent implements OnInit {
+export class NgOpenSeaMapsNavigatorComponent {
 
   @Input()
   mapView: MapView;
 
   @Input()
-  mapLayer: Map<string, MapLayer>;
+  baseLayer: Array<MapLayer>;
 
   @Input()
-  geoJsons: Map<string, any>;
+  overlayMaps: Array<MapLayer>;
+
+  @Input()
+  geoJsons: Array<GeoJsonLayer>;
 
   constructor() {
-  }
-
-  ngOnInit() {
   }
 
 }
