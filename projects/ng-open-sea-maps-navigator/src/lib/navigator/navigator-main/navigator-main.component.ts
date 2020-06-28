@@ -11,6 +11,24 @@ import {GeoJsonLayer} from '../../shared/dto/geo-json-layer';
 })
 export class NavigatorMainComponent implements OnInit, AfterViewInit {
 
+  constructor() {
+  }
+
+  static geoJSonStyle = {
+    color: 'red',
+    weight: 2,
+    opacity: 1
+  };
+
+  static geoJsonMarkerOptions = {
+    radius: 2,
+    fillColor: '#33ccff',
+    color: '#000',
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+
   @ViewChild('map', {static: true})
   mapElement: ElementRef;
 
@@ -30,15 +48,6 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
   private baseMaps: Map<string, any>;
   private optionalMapLayer: Map<string, any>;
   private geoJsoLayer: Map<string, any>;
-
-  private geoJSonStyle = {
-    color: 'red',
-    weight: 2,
-    opacity: 1
-  };
-
-  constructor() {
-  }
 
   ngOnInit() {
   }
@@ -91,7 +100,19 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
         this.geoJsoLayer = new Map<string, any>();
         this.geoJsons.forEach((value) => {
 
-          const geoJsonLayerToAdd = L.geoJSON(value.geoJson, this.geoJSonStyle);
+          const geoJsonLayerToAdd = L.geoJSON(value.geoJson, {
+            style(geoJsonFeature) {
+              if (geoJsonFeature.geometry.type === 'MultiPoint') {
+                return NavigatorMainComponent.geoJsonMarkerOptions;
+              }
+              return NavigatorMainComponent.geoJSonStyle;
+            },
+            pointToLayer(feature, latlng) {
+              return L.circleMarker(latlng, NavigatorMainComponent.geoJsonMarkerOptions);
+            }
+          });
+
+          // const geoJsonLayerToAdd = L.geoJSON(value.geoJson, this.geoJSonStyle);
           geoJsonLayerToAdd.addTo(this.map);
           layerControl.addOverlay(geoJsonLayerToAdd, value.displayName);
           this.geoJsoLayer.set(value.layerId, geoJsonLayerToAdd);
@@ -99,5 +120,4 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
       }
     }
   }
-
 }
