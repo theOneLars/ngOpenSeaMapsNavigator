@@ -75,7 +75,6 @@ export class NavigatorMainComponent implements OnInit, AfterViewInit {
               attribution: value.attribution
             });
             layerToAdd.addTo(this.map);
-            console.log(L.control.layers);
             layerControl.addBaseLayer(layerToAdd, value.displayName);
             this.baseMaps.set(value.layerId, layerToAdd);
           }
